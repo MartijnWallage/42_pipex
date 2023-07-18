@@ -6,14 +6,15 @@
 #    By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/17 18:11:58 by mwallage          #+#    #+#              #
-#    Updated: 2023/07/17 18:21:01 by mwallage         ###   ########.fr        #
+#    Updated: 2023/07/18 16:05:49 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		:=	cc
 CFLAGS	:=	-Wall -Wextra -Werror
 SRCDIR	:=	src
-SRC		:=	$(SRCDIR)/pipex.c
+SRC		:=	$(SRCDIR)/pipex.c\
+			$(SRCDIR)/utils.c
 OBJ		:=	$(SRC:.o=.c)
 LIBFTDIR	:= Libft
 LIBFT	:= $(LIBFTDIR)/libft.a

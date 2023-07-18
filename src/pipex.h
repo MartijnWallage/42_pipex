@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 18:12:26 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/17 18:12:28 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/07/18 16:05:28 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,9 @@
 # include<sys/stat.h>
 # include <fcntl.h>  
 # include <stdlib.h>
+
+void	handle_error(char *message);
+char	*find_path(char *cmd, char **env);
+int		pathlen(char *envi, char end);
 
 #endif
