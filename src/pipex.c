@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 13:23:15 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/18 16:06:10 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/07/24 18:17:51 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,15 @@ void	exec(char *cmd, char *envp[])
 {
 	char	**whole_cmd;
 	char	*path;
+	int		len;
 	
 	whole_cmd = ft_split(cmd, ' ');
 	path = find_path(whole_cmd[0], envp);
 	if (execve(path, whole_cmd, envp) == -1)
-		handle_error("Execve error");
+	{
+		free_tab(whole_cmd);
+		handle_error(cmd);
+	}
 }
 
 void	parent(char *argv[], int pipe_fd[], char *envp[])
@@ -29,7 +33,7 @@ void	parent(char *argv[], int pipe_fd[], char *envp[])
 
 	fd = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
-		return (handle_error("Open error"));
+		handle_error(argv[4]);
 	dup2(fd, STDOUT_FILENO);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[1]);
@@ -42,7 +46,7 @@ void	child(char *argv[], int pipe_fd[], char *envp[])
 
 	fd = open(argv[1], O_RDONLY, 0777);
 	if (fd == -1)
-		return (handle_error("Open error"));
+		handle_error(argv[1]);
 	dup2(fd, STDIN_FILENO);
 	dup2(pipe_fd[1], STDOUT_FILENO);
 	close(pipe_fd[0]);
@@ -55,12 +59,15 @@ int	main(int argc, char *argv[], char **envp)
 	pid_t	pid;
 	
 	if (argc != 5)
+	{
+		write(2, "./pipex infile cmd1 cmd2 outfile\n", 33);
 		return (1);
+	}
 	if (pipe(pipe_fd) == -1)
-		handle_error("Pipe error");
+		handle_error("pipe error");
 	pid = fork();
 	if (pid == -1)
-		handle_error("Fork error");
+		handle_error("fork error");
 	if (pid == 0)
 		child(argv, pipe_fd, envp);
 	parent(argv, pipe_fd, envp);

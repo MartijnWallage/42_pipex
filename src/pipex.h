@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 18:12:26 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/18 16:05:28 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/07/24 18:00:39 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@
 # include<sys/stat.h>
 # include <fcntl.h>  
 # include <stdlib.h>
+# include <errno.h>
+# include <string.h>
 
 void	handle_error(char *message);
 char	*find_path(char *cmd, char **env);
 int		pathlen(char *envi, char end);
+void	free_tab(char **tab);
 
 #endif

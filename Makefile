@@ -6,7 +6,7 @@
 #    By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/17 18:11:58 by mwallage          #+#    #+#              #
-#    Updated: 2023/07/18 16:05:49 by mwallage         ###   ########.fr        #
+#    Updated: 2023/07/24 18:12:37 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ NAME	:=	pipex
 
 all	: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT)
+$(NAME): $(OBJ) $(LIBFT) $(SRCDIR)/pipex.h
 	$(CC) $(OBJ) -o $@ -L$(LIBFTDIR) -lft
 
 %.o: %.c

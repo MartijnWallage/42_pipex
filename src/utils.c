@@ -6,18 +6,24 @@
 /*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:44:08 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/18 18:26:26 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/07/24 18:25:52 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	handle_error(char *message)
+void	handle_error(char *failure)
 {
-	int	len;
+	char	*errno_readable;
+	int		len;
 
-	len = ft_strlen(message);
-	write(2, message, len);
+	errno_readable = strerror(errno);
+	len = ft_strlen(errno_readable);
+	write(2, "pipex: ", 7);
+	write(2, errno_readable, len);
+	len = ft_strlen(failure);
+	write(2, ": ", 2);
+	write(2, failure, len);
 	write(2, "\n", 1);
 	exit(1);
 }
@@ -47,21 +53,36 @@ static char	*get_paths(char **env)
 			j++;
 		sub = ft_substr(env[i], 0, j);
 		if (!sub)
-			handle_error("Malloc error in ft_substr");
+			handle_error("malloc failed");
 		if (ft_strncmp(sub, "PATH", j - 1) == 0)
 		{
 			len = ft_strlen(env[i] + j + 1);
+			free(sub);
 			sub = ft_substr(env[i], j + 1, len);
 			return (sub);
 		}
+		free(sub);
 		i++;
 	}
 	return (NULL);
 }
 
-static char	*try_paths(char *cmd, char *paths)
+void	free_tab(char **tab)
 {
 	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+static char	*try_paths(char *cmd, char *paths)
+{
+	int		i;
 	char	**path_tab;
 	char	*whole_cmd;
 	
@@ -72,12 +93,16 @@ static char	*try_paths(char *cmd, char *paths)
 	{
 		whole_cmd = ft_strjoin(path_tab[i], cmd);
 		if (!whole_cmd)
-			handle_error("Ft_strjoin errs");
+		{
+			free_tab(path_tab);
+			handle_error("malloc failed");
+		}
 		if (access(whole_cmd, F_OK | X_OK) == 0)
 			return (whole_cmd);
 		free(whole_cmd);
 		i++;
 	}
+	free_tab(path_tab);
 	free(cmd);
 	return (NULL);
 }
@@ -89,6 +114,7 @@ char	*find_path(char *cmd, char **env)
 	
 	paths = get_paths(env);
 	whole_cmd = try_paths(cmd, paths);
+	free(paths);
 	if (whole_cmd)
 		return (whole_cmd);
 	return (cmd);
