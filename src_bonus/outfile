@@ -1,1 +1,15 @@
-this is a line
+ft_split.c
+ft_split.o
+ft_strjoin.c
+ft_strjoin.o
+ft_strlen.c
+ft_strlen.o
+ft_strncmp.c
+ft_strncmp.o
+infile
+Makefile
+outfile
+pipex
+pipex_bonus.c
+pipex_bonus.h
+pipex_bonus.o

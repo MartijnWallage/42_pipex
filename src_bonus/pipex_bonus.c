@@ -41,7 +41,6 @@ char *get_path(char *cmd, char **env)
 	while (paths[i])
 	{
 		whole_cmd = ft_strjoin(paths[i], "/");
-		perror(whole_cmd);
 		whole_cmd = ft_strjoin(whole_cmd, cmd);
 		if (access(whole_cmd, F_OK | X_OK) == 0)
 		{
@@ -59,6 +58,7 @@ void	child(int pipefd[2], char **av, char **env)
 {
 	int		fd_in;
 	char	*path;
+	char	**whole_cmd;
 
 	fd_in = open(av[1], O_RDONLY, 0777);
 	if (fd_in == -1)
@@ -66,18 +66,17 @@ void	child(int pipefd[2], char **av, char **env)
 	dup2(fd_in, 0);
 	dup2(pipefd[1], 1);
 	close(pipefd[0]);
-	path = get_path(av[2], env);
-	if (execve(path, av, env) == -1)
-	{
+	whole_cmd = ft_split(av[2], ' ');
+	path = get_path(whole_cmd[0], env);
+	if (execve(path, whole_cmd, env) == -1)
 		handle_error(path);
-		free(path);
-	}
 }
 
 void	parent(int pipefd[2], char **av, char **env)
 {
 	int		fd_out;
 	char	*path;
+	char	**whole_cmd;
 
 	fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd_out == -1)
@@ -85,12 +84,10 @@ void	parent(int pipefd[2], char **av, char **env)
 	dup2(fd_out, 1);
 	dup2(pipefd[0], 0);
 	close(pipefd[1]);
-	path = get_path(av[3], env);
-	if (execve(path, av, env) == -1)
-	{
+	whole_cmd = ft_split(av[3], ' ');
+	path = get_path(whole_cmd[0], env);
+	if (execve(path, whole_cmd, env) == -1)
 		handle_error(path);
-		free(path);
-	}
 }
 
 int	main(int argc, char **argv, char **envp)
