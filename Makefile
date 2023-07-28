@@ -6,7 +6,7 @@
 #    By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/17 18:11:58 by mwallage          #+#    #+#              #
-#    Updated: 2023/07/27 16:17:21 by mwallage         ###   ########.fr        #
+#    Updated: 2023/07/28 16:19:42 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@ SRC		:=	$(SRCDIR)/pipex.c\
 			$(SRCDIR)/utils.c
 SRC_BONUS := $(SRCDIR)/pipex_bonus.c\
 			$(SRCDIR)/utils.c
-OBJ		:=	$(SRC:.o=.c)
-OBJ_BONUS := $(SRC_BONUS:.o=.c)
+OBJ		:=	$(SRC:.c=.o)
+OBJ_BONUS := $(SRC_BONUS:.c=.o)
 LIBFTDIR	:= Libft
 LIBFT	:= $(LIBFTDIR)/libft.a
 NAME	:=	pipex

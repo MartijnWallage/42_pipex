@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 13:23:15 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/24 18:17:51 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/07/28 14:28:24 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	exec(char *cmd, char *envp[])
 {
 	char	**whole_cmd;
 	char	*path;
-	int		len;
 	
 	whole_cmd = ft_split(cmd, ' ');
 	path = find_path(whole_cmd[0], envp);

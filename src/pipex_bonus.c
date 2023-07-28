@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 14:38:14 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/27 16:39:46 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/07/28 16:40:26 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	exec(char *cmd, char *envp[])
 {
 	char	**whole_cmd;
 	char	*path;
-	int		len;
 	
 	whole_cmd = ft_split(cmd, ' ');
 	path = find_path(whole_cmd[0], envp);
@@ -50,6 +49,44 @@ void	do_pipe(char *cmd, char **env)
 	}
 }
 
+void	heredoc_input(char *delimiter, int pipefd[2])
+{
+	char	*input;
+
+	close(pipefd[0]);
+	while (1)
+	{
+		input = get_next_line(STDIN_FILENO);
+		if (ft_strncmp(input, delimiter, ft_strlen(delimiter)) == 0)
+		{
+			free(input);
+			exit(0);
+		}
+		ft_putstr_fd(input, pipefd[1]);
+		free(input);
+	}	
+}
+
+void	heredoc(char *delimiter)
+{	
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (pipe(pipefd) == -1)
+		handle_error("pipe error");
+	pid = fork();
+	if (pid == -1)
+		handle_error("fork error");
+	if (pid == 0)
+		heredoc_input(delimiter, pipefd);
+	if (pid > 0)
+	{
+		close(pipefd[1]);
+		dup2(pipefd[0], 0);
+		wait(NULL);
+	}
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	int	i;
@@ -58,11 +95,21 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc < 5)
 		handle_error("infile cmd1 cmd2 ... outfile");
-	// if here_doc do here_doc
-	fd_in = open(argv[1], O_RDONLY, 0777);
-	fd_out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	dup2(fd_in, 0);
-	i = 1;
+	if (ft_strcmp(argv[1], "here_doc") == 0)
+	{
+		if (argc < 6)
+			handle_error("not enough arguments");
+		i = 2;
+		fd_out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
+		heredoc(argv[2]);
+	}
+	else
+	{
+		fd_in = open(argv[1], O_RDONLY, 0777);
+		fd_out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		dup2(fd_in, 0);
+		i = 1;
+	}
 	while (++i < argc - 2)
 		do_pipe(argv[i], envp);
 	dup2(fd_out, 1);
