@@ -5,49 +5,61 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/07/17 18:11:58 by mwallage          #+#    #+#              #
-#    Updated: 2023/07/28 16:19:42 by mwallage         ###   ########.fr        #
+#    Created: 2023/07/31 14:36:39 by mwallage          #+#    #+#              #
+#    Updated: 2023/07/31 14:45:10 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC		:=	cc
-CFLAGS	:=	-Wall -Wextra -Werror
-SRCDIR	:=	src
-SRC		:=	$(SRCDIR)/pipex.c\
-			$(SRCDIR)/utils.c
-SRC_BONUS := $(SRCDIR)/pipex_bonus.c\
-			$(SRCDIR)/utils.c
-OBJ		:=	$(SRC:.c=.o)
-OBJ_BONUS := $(SRC_BONUS:.c=.o)
-LIBFTDIR	:= Libft
-LIBFT	:= $(LIBFTDIR)/libft.a
-NAME	:=	pipex
-BONUS	:=	pipex_bonus
+CC		:= cc
+CFLAGS	:= -Wall -Wextra -Werror
+SRCDIR	:= src
+SRCBDIR	:= src_bonus
+SRC		:= $(SRCDIR)/ft_split.c\
+			$(SRCDIR)/ft_strjoin.c\
+			$(SRCDIR)/ft_strncmp.c\
+			$(SRCDIR)/ft_strlen.c\
+			$(SRCDIR)/pipex.c\
+			$(SRCDIR)/pipex_utils.c\
+			$(SRCDIR)/ft_putstr_fd.c\
+			$(SRCDIR)/get_next_line.c\
+			$(SRCDIR)/get_next_line_utils.c
+SRCB	:= $(SRCBDIR)/ft_split.c\
+			$(SRCBDIR)/ft_strjoin.c\
+			$(SRCBDIR)/ft_strncmp.c\
+			$(SRCBDIR)/ft_strlen.c\
+			$(SRCBDIR)/pipex_bonus.c\
+			$(SRCBDIR)/pipex_utils_bonus.c\
+			$(SRCBDIR)/ft_putstr_fd.c\
+			$(SRCBDIR)/get_next_line.c\
+			$(SRCBDIR)/get_next_line_utils.c
+OBJ		:= $(SRC:.c=.o)
+OBJB	:= $(SRCB:.c=.o)
+NAME	:= pipex
+NAMEB	:= pipex_bonus
 
-all	: $(NAME)
+all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT) $(SRCDIR)/pipex.h
-	$(CC) $(OBJ) -o $@ -L$(LIBFTDIR) -lft
+$(NAME): $(OBJ)
+	cc $(OBJ) -o $@
 
-bonus: $(BONUS)
+bonus: $(NAMEB)
 
-$(BONUS): $(OBJ_BONUS) $(LIBFT)
-	$(CC) $(OBJ_BONUS) -o $@ -L$(LIBFTDIR) -lft
+$(NAMEB): $(OBJB)
+	cc $(OBJB) -o $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(LIBFTDIR)
+$(SRCDIR)/%.o: $(SRCDIR)/%.c
+	cc -Wall -Wextra -Werror -c $< -o $@ 
 
-$(LIBFT):
-	make -C$(LIBFTDIR)
-	
+$(SRCBDIR)/%.o: $(SRCBDIR)/%.c
+	cc -Wall -Wextra -Werror -c $< -o $@
+
 clean:
-	rm -f $(SRCDIR)/*.o
-	make clean -C$(LIBFTDIR)
+	rm -f $(OBJ) $(OBJB)
 
 fclean: clean
-	make fclean -C$(LIBFTDIR)
-	rm $(NAME)
+	rm -f $(NAME)
 
-re: fclean $(NAME)
+re: fclean
+	all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re

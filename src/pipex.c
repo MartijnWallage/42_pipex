@@ -5,70 +5,75 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/17 13:23:15 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/28 14:28:24 by mwallage         ###   ########.fr       */
+/*   Created: 2023/07/31 11:45:11 by mwallage          #+#    #+#             */
+/*   Updated: 2023/07/31 15:24:45 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	exec(char *cmd, char *envp[])
+void	child(int pipefd[2], char **av, char **env)
 {
-	char	**whole_cmd;
+	int		infile;
 	char	*path;
-	
-	whole_cmd = ft_split(cmd, ' ');
-	path = find_path(whole_cmd[0], envp);
-	if (execve(path, whole_cmd, envp) == -1)
+	char	**whole_cmd;
+
+	infile = open(av[1], O_RDONLY, 0777);
+	if (infile == -1)
+		handle_error(av[1]);
+	dup2(infile, 0);
+	dup2(pipefd[1], 1);
+	close(pipefd[0]);
+	whole_cmd = ft_split(av[2], ' ');
+	path = get_path(whole_cmd[0], env);
+	if (execve(path, whole_cmd, env) == -1)
 	{
+		close(infile);
+		close(pipefd[1]);
+		free(path);
 		free_tab(whole_cmd);
-		handle_error(cmd);
+		handle_error("command not found");
 	}
 }
 
-void	parent(char *argv[], int pipe_fd[], char *envp[])
+void	parent(int pipefd[2], char **av, char **env)
 {
-	int	fd;
+	int		outfile;
+	char	*path;
+	char	**whole_cmd;
 
-	fd = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (fd == -1)
-		handle_error(argv[4]);
-	dup2(fd, STDOUT_FILENO);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	close(pipe_fd[1]);
-	exec(argv[3], envp);
-}
-
-void	child(char *argv[], int pipe_fd[], char *envp[])
-{
-	int	fd;
-
-	fd = open(argv[1], O_RDONLY, 0777);
-	if (fd == -1)
-		handle_error(argv[1]);
-	dup2(fd, STDIN_FILENO);
-	dup2(pipe_fd[1], STDOUT_FILENO);
-	close(pipe_fd[0]);
-	exec(argv[2], envp);
-}
-
-int	main(int argc, char *argv[], char **envp)
-{
- 	int		pipe_fd[2];
-	pid_t	pid;
-	
-	if (argc != 5)
+	outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (outfile == -1)
+		handle_error(av[4]);	
+	dup2(outfile, 1);
+	dup2(pipefd[0], 0);
+	close(pipefd[1]);
+	whole_cmd = ft_split(av[3], ' ');
+	path = get_path(whole_cmd[0], env);
+	if (execve(path, whole_cmd, env) == -1)
 	{
-		write(2, "./pipex infile cmd1 cmd2 outfile\n", 33);
-		return (1);
+		close(outfile);
+		close(pipefd[0]);
+		free(path);
+		free_tab(whole_cmd);
+		handle_error("command not found");
 	}
-	if (pipe(pipe_fd) == -1)
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (argc < 5)
+		handle_error("Not enough arguments");
+	if (pipe(pipefd) == -1)
 		handle_error("pipe error");
 	pid = fork();
 	if (pid == -1)
 		handle_error("fork error");
 	if (pid == 0)
-		child(argv, pipe_fd, envp);
-	parent(argv, pipe_fd, envp);
+		child(pipefd, argv, envp);
+	parent(pipefd, argv, envp);
 	return (0);
 }
