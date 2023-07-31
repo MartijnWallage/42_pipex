@@ -1,3 +1,5 @@
+ft_putstr_fd.c
+ft_putstr_fd.o
 ft_split.c
 ft_split.o
 ft_strjoin.c
@@ -6,6 +8,10 @@ ft_strlen.c
 ft_strlen.o
 ft_strncmp.c
 ft_strncmp.o
+get_next_line.c
+get_next_line.o
+get_next_line_utils.c
+get_next_line_utils.o
 infile
 Makefile
 outfile
@@ -13,3 +19,6 @@ pipex
 pipex_bonus.c
 pipex_bonus.h
 pipex_bonus.o
+pipex.c
+pipex_utils_bonus.c
+pipex_utils_bonus.o
