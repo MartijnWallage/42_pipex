@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: mwallage <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/02 14:07:52 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/28 17:40:15 by mwallage         ###   ########.fr       */
+/*   Created: 2023/05/02 14:06:44 by mwallage          #+#    #+#             */
+/*   Updated: 2023/05/08 10:37:22 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
-
-size_t	ft_strlen(const char *s)
+int	ft_isprint(int c)
 {
-	size_t	size;
-
-	if (s == NULL)
-		return (0);
-	size = 0;
-	while (s[size])
-		size++;
-	return (size);
+	return (c >= 32 && c <= 126);
 }

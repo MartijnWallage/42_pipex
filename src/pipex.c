@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:11 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 15:24:45 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 16:39:03 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ void	child(int pipefd[2], char **av, char **env)
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
 	{
-		close(infile);
-		close(pipefd[1]);
-		free(path);
+//		close(infile);
+//		close(pipefd[1]);
+//		free(path);
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(whole_cmd[0], 2);
 		free_tab(whole_cmd);
-		handle_error("command not found");
+		exit(0);
+//		handle_error("command not found");
 	}
 }
 
@@ -44,7 +47,7 @@ void	parent(int pipefd[2], char **av, char **env)
 
 	outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfile == -1)
-		handle_error(av[4]);	
+		handle_error(av[4]);
 	dup2(outfile, 1);
 	dup2(pipefd[0], 0);
 	close(pipefd[1]);

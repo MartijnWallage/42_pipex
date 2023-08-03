@@ -6,11 +6,11 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 18:42:44 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 14:40:37 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:53:56 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../inc/libft.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

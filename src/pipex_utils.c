@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:44:55 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 15:25:33 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 16:25:08 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_error(char *info)
 void	free_tab(char **tab)
 {
 	int	i;
-	
+
 	i = 0;
 	while (tab[i])
 	{
@@ -46,7 +46,7 @@ static char	*try_paths(char *cmd, char **paths)
 	int		i;
 	char	*whole_cmd;
 	char	*temp;
-	
+
 	i = 0;
 	while (paths[i])
 	{
@@ -62,7 +62,7 @@ static char	*try_paths(char *cmd, char **paths)
 	return (cmd);
 }
 
-char *get_path(char *cmd, char **env)
+char	*get_path(char *cmd, char **env)
 {
 	char	**line;
 	char	**paths;

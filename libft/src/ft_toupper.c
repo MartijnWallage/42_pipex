@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/02 14:07:52 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 14:40:33 by mwallage         ###   ########.fr       */
+/*   Created: 2023/05/03 10:52:04 by mwallage          #+#    #+#             */
+/*   Updated: 2023/06/01 16:52:30 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
-
-size_t	ft_strlen(const char *s)
+int	ft_toupper(int c)
 {
-	size_t	size;
-
-	if (s == NULL)
-		return (0);
-	size = 0;
-	while (s[size])
-		size++;
-	return (size);
+	if (c >= 'a' && c <= 'z')
+		c -= 'a' - 'A';
+	return (c);
 }

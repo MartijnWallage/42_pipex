@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 11:13:16 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 13:13:18 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:50:30 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "../inc/libft.h"
 
 static size_t	ft_wordlen(const char *s, const char c)
 {
@@ -54,7 +54,7 @@ static void	fill_str(char *tabs, const char *s, size_t wordlen)
 	tabs[i] = '\0';
 }
 
-static void	*free_tab_null(char **tab)
+static void	*free_tab(char **tab)
 {
 	size_t	i;
 
@@ -87,7 +87,7 @@ char	**ft_split(char const *s, char c)
 		wordlen = ft_wordlen(s, c);
 		tab[i] = malloc(wordlen);
 		if (tab[i] == NULL)
-			return (free_tab_null(tab));
+			return (free_tab(tab));
 		fill_str(tab[i], s, wordlen);
 		s += wordlen;
 		i++;

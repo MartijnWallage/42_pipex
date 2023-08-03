@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:44:55 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 13:04:30 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 16:25:41 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	exec(char *cmd, char **env)
 {
 	char	*path;
 	char	**whole_cmd;
-	
+
 	whole_cmd = ft_split(cmd, ' ');
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
@@ -48,7 +48,7 @@ void	heredoc(char *delimiter)
 	char	*line;
 	int		pipefd[2];
 	pid_t	pid;
-	
+
 	if (pipe(pipefd) == -1)
 		handle_error("pipe error");
 	pid = fork();

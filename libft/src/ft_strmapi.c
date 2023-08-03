@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/04 12:55:19 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 14:40:18 by mwallage         ###   ########.fr       */
+/*   Created: 2023/05/05 16:31:25 by mwallage          #+#    #+#             */
+/*   Updated: 2023/06/01 16:51:40 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../inc/libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*joined;
 	char	*result;
+	int		size;
+	int		i;
 
-	joined = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (joined == NULL)
+	size = ft_strlen(s);
+	result = malloc(size + 1);
+	if (result == NULL)
 		return (NULL);
-	result = joined;
-	while (*s1)
-		*joined++ = *s1++;
-	while (*s2)
-		*joined++ = *s2++;
-	*joined = '\0';
+	i = 0;
+	while (i < size)
+	{
+		result[i] = f(i, s[i]);
+		i++;
+	}
+	result[i] = '\0';
 	return (result);
 }

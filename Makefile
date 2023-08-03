@@ -6,7 +6,7 @@
 #    By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/31 14:36:39 by mwallage          #+#    #+#              #
-#    Updated: 2023/07/31 14:45:10 by mwallage         ###   ########.fr        #
+#    Updated: 2023/08/03 16:15:18 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,50 +14,43 @@ CC		:= cc
 CFLAGS	:= -Wall -Wextra -Werror
 SRCDIR	:= src
 SRCBDIR	:= src_bonus
-SRC		:= $(SRCDIR)/ft_split.c\
-			$(SRCDIR)/ft_strjoin.c\
-			$(SRCDIR)/ft_strncmp.c\
-			$(SRCDIR)/ft_strlen.c\
-			$(SRCDIR)/pipex.c\
-			$(SRCDIR)/pipex_utils.c\
-			$(SRCDIR)/ft_putstr_fd.c\
-			$(SRCDIR)/get_next_line.c\
-			$(SRCDIR)/get_next_line_utils.c
-SRCB	:= $(SRCBDIR)/ft_split.c\
-			$(SRCBDIR)/ft_strjoin.c\
-			$(SRCBDIR)/ft_strncmp.c\
-			$(SRCBDIR)/ft_strlen.c\
-			$(SRCBDIR)/pipex_bonus.c\
-			$(SRCBDIR)/pipex_utils_bonus.c\
-			$(SRCBDIR)/ft_putstr_fd.c\
-			$(SRCBDIR)/get_next_line.c\
-			$(SRCBDIR)/get_next_line_utils.c
+LIBDIR	:= libft
+SRC		:= 	$(SRCDIR)/pipex.c\
+			$(SRCDIR)/pipex_utils.c
+SRCB	:= 	$(SRCBDIR)/pipex_bonus.c\
+			$(SRCBDIR)/pipex_utils_bonus.c
 OBJ		:= $(SRC:.c=.o)
 OBJB	:= $(SRCB:.c=.o)
 NAME	:= pipex
 NAMEB	:= pipex_bonus
+LIBFT	:= $(LIBDIR)/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	cc $(OBJ) -o $@
+$(NAME): $(OBJ) $(LIBFT)
+	cc $(OBJ) -o $@ -L$(LIBDIR) -lft
 
 bonus: $(NAMEB)
 
-$(NAMEB): $(OBJB)
-	cc $(OBJB) -o $@
+$(LIBFT): $(LIBDIR)/inc/libft.h
+	make -C$(LIBDIR)
+
+$(NAMEB): $(OBJB) $(LIBFT)
+	cc $(OBJB) -o $@ -L$(LIBDIR) -lft
 
 $(SRCDIR)/%.o: $(SRCDIR)/%.c
-	cc -Wall -Wextra -Werror -c $< -o $@ 
+	cc -Wall -Wextra -Werror -c $< -o $@ -I$(LIBDIR)/inc
 
 $(SRCBDIR)/%.o: $(SRCBDIR)/%.c
-	cc -Wall -Wextra -Werror -c $< -o $@
+	cc -Wall -Wextra -Werror -c $< -o $@ -I$(LIBDIR)/inc
 
 clean:
 	rm -f $(OBJ) $(OBJB)
+	make clean -C$(LIBDIR)
 
 fclean: clean
 	rm -f $(NAME)
+	make fclean -C$(LIBDIR)
 
 re: fclean
 	all

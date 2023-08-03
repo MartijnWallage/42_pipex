@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: mwallage <mwallage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:12:45 by mwallage          #+#    #+#             */
-/*   Updated: 2023/07/31 12:44:58 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:51:41 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "../inc/libft.h"
 
 static char	*append_buffer_to_line(char *buffer, char *oldline)
 {
