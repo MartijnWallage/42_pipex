@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:11 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/03 18:10:30 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 18:49:22 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	int		pipefd[2];
 	pid_t	pid;
+	int		status;
 
 	if (argc < 5)
 		handle_error("./pipex infile cmd1 cmd2 outfile");
@@ -76,7 +77,8 @@ int	main(int argc, char **argv, char **envp)
 		handle_error("fork error");
 	if (pid == 0)
 		child(pipefd, argv, envp);
-	wait(NULL);
-	parent(pipefd, argv, envp);
+	pid = waitpid(-1, &status, 0);
+	if (WIFEXITED(status))
+		parent(pipefd, argv, envp);
 	return (0);
 }
