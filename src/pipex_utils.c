@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:44:55 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/03 16:25:08 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 16:58:18 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,15 @@ char	*get_path(char *cmd, char **env)
 	char	*whole_cmd;
 	int		i;
 
+	if (!env)
+		return (cmd);		
 	i = 0;
 	while (1)
 	{
+		if (!env[i])
+			return (cmd);
 		line = ft_split(env[i++], '=');
-		if (ft_strcmp(line[0], "PATH") == 0)
+		if (ft_strncmp(line[0], "PATH", 4) == 0)
 			break ;
 		free_tab(line);
 	}

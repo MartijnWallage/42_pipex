@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:11 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/03 16:39:03 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/03 18:10:30 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,18 @@ void	child(int pipefd[2], char **av, char **env)
 	if (infile == -1)
 		handle_error(av[1]);
 	dup2(infile, 0);
-	dup2(pipefd[1], 1);
+	close(infile);
 	close(pipefd[0]);
+	dup2(pipefd[1], 1);
+	close(pipefd[1]);
 	whole_cmd = ft_split(av[2], ' ');
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
 	{
-//		close(infile);
-//		close(pipefd[1]);
-//		free(path);
-		ft_putstr_fd("pipex: command not found: ", 2);
-		ft_putendl_fd(whole_cmd[0], 2);
 		free_tab(whole_cmd);
-		exit(0);
-//		handle_error("command not found");
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(av[2], 2);
+		exit(1);
 	}
 }
 
@@ -49,17 +47,18 @@ void	parent(int pipefd[2], char **av, char **env)
 	if (outfile == -1)
 		handle_error(av[4]);
 	dup2(outfile, 1);
-	dup2(pipefd[0], 0);
+	close(outfile);
 	close(pipefd[1]);
+	dup2(pipefd[0], 0);
+	close(pipefd[0]);
 	whole_cmd = ft_split(av[3], ' ');
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
 	{
-		close(outfile);
-		close(pipefd[0]);
-		free(path);
 		free_tab(whole_cmd);
-		handle_error("command not found");
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(av[3], 2);
+		exit(1);
 	}
 }
 
@@ -69,7 +68,7 @@ int	main(int argc, char **argv, char **envp)
 	pid_t	pid;
 
 	if (argc < 5)
-		handle_error("Not enough arguments");
+		handle_error("./pipex infile cmd1 cmd2 outfile");
 	if (pipe(pipefd) == -1)
 		handle_error("pipe error");
 	pid = fork();
@@ -77,6 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		handle_error("fork error");
 	if (pid == 0)
 		child(pipefd, argv, envp);
+	wait(NULL);
 	parent(pipefd, argv, envp);
 	return (0);
 }
