@@ -6,13 +6,13 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:44:55 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/07 16:28:43 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:36:51 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	handle_error(char *info)
+void	handle_error(char *info, int exitcode)
 {
 	char	*errno_readable;
 	int		len;
@@ -25,7 +25,7 @@ void	handle_error(char *info)
 	write(2, ": ", 2);
 	write(2, info, len);
 	write(2, "\n", 1);
-	exit(1);
+	exit(exitcode);
 }
 
 void	free_tab(char **tab)
@@ -96,13 +96,13 @@ void	check_format(int ac, char **av)
 		ft_putstr_fd("\t./pipex_bonus infile cmd1 cmd2 ... outfile\n", 2);
 		ft_putstr_fd(
 			"\t./pipex_bonus here_doc DELIMITER cmd1 cmd2 ... outfile\n", 2);
-		exit(0);
+		exit(1);
 	}
 	if ((ft_strcmp(av[1], "here_doc") == 0) && ac < 6)
 	{
 		ft_putstr_fd("Format:\n", 2);
 		ft_putstr_fd(
 			"\t./pipex_bonus here_doc DELIMITER cmd1 cmd2 ... outfile\n", 2);
-		exit(0);
+		exit(1);
 	}
 }

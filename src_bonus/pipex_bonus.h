@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:35 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/07 16:14:48 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:37:23 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include "../libft/inc/libft.h"
 
 /*	utils	*/
-void	handle_error(char *info);
+void	handle_error(char *info, int exitcode);
 void	free_tab(char **tab);
 char	*get_path(char *cmd, char **env);
 void	close_pipes(int pipefd[2]);

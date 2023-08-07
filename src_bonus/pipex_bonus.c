@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:44:55 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/07 16:27:24 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:38:40 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ static void	child(char *cmd, char **env)
 	pid_t	pid;
 
 	if (pipe(pipefd) == -1)
-		handle_error("pipe error");
+		handle_error("pipe error", 1);
 	pid = fork();
 	if (pid == -1)
-		handle_error("pid error");
+		handle_error("pid error", 1);
 	if (pid == 0)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
@@ -62,7 +62,7 @@ static void	write_heredoc(char *delimiter, int pipefd[2])
 	{
 		line = get_next_line(STDIN_FILENO);
 		if (line == NULL)
-			handle_error("incomplete here_doc");
+			handle_error("incomplete here_doc", 1);
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
 		{
 			free(line);
@@ -83,10 +83,10 @@ static int	get_input(char **av)
 	if (ft_strcmp(av[1], "here_doc") == 0)
 	{
 		if (pipe(pipefd) == -1)
-			handle_error("pipe error");
+			handle_error("pipe error", 1);
 		pid = fork();
 		if (pid == -1)
-			handle_error("pid error");
+			handle_error("pid error", 1);
 		if (pid == 0)
 			write_heredoc(av[2], pipefd);
 		waitpid(pid, NULL, 0);
@@ -97,7 +97,7 @@ static int	get_input(char **av)
 	}
 	infile = open(av[1], O_RDONLY, 0777);
 	if (infile == -1)
-		handle_error(av[1]);
+		handle_error(av[1], 0);
 	dup2(infile, STDIN_FILENO);
 	close(infile);
 	return (1);
@@ -117,7 +117,7 @@ int	main(int ac, char **av, char **env)
 	else
 		outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (outfile == -1)
-		handle_error(av[ac -1]);
+		handle_error(av[ac -1], 1);
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec(av[ac - 2], env, 127);
