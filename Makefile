@@ -6,7 +6,7 @@
 #    By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/31 14:36:39 by mwallage          #+#    #+#              #
-#    Updated: 2023/08/07 16:27:43 by mwallage         ###   ########.fr        #
+#    Updated: 2023/08/07 16:30:18 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ clean:
 	make clean -C$(LIBDIR)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(NAMEB)
 	make fclean -C$(LIBDIR)
 
 re: fclean
