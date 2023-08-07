@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:11 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/03 18:49:22 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:20:42 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	child(int pipefd[2], char **av, char **env)
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
 	{
+		if (ft_strcmp(path, whole_cmd[0]))
+			free(path);
 		free_tab(whole_cmd);
 		ft_putstr_fd("pipex: command not found: ", 2);
 		ft_putendl_fd(av[2], 2);
@@ -55,6 +57,8 @@ void	parent(int pipefd[2], char **av, char **env)
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
 	{
+		if (ft_strcmp(path, whole_cmd[0]))
+			free(path);
 		free_tab(whole_cmd);
 		ft_putstr_fd("pipex: command not found: ", 2);
 		ft_putendl_fd(av[3], 2);
@@ -76,6 +80,6 @@ int	main(int argc, char **argv, char **envp)
 		handle_error("fork error");
 	if (pid == 0)
 		child(pipefd, argv, envp);
-	wait(NULL);
+	waitpid(pid, NULL, 0);
 	parent(pipefd, argv, envp);
 }

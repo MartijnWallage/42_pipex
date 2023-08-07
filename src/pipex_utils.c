@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:44:55 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/03 16:58:18 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:21:10 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*get_path(char *cmd, char **env)
 	int		i;
 
 	if (!env)
-		return (cmd);		
+		return (cmd);
 	i = 0;
 	while (1)
 	{
