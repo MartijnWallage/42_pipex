@@ -6,7 +6,7 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:35 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/03 16:31:58 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:41:08 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@
 void	handle_error(char *info);
 void	free_tab(char **tab);
 char	*get_path(char *cmd, char **env);
+void	close_pipes(int pipefd[2]);
 
 #endif

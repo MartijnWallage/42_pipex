@@ -6,13 +6,13 @@
 /*   By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:45:11 by mwallage          #+#    #+#             */
-/*   Updated: 2023/08/07 15:20:42 by mwallage         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:43:09 by mwallage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child(int pipefd[2], char **av, char **env)
+static void	child(int pipefd[2], char **av, char **env)
 {
 	int		infile;
 	char	*path;
@@ -22,10 +22,9 @@ void	child(int pipefd[2], char **av, char **env)
 	if (infile == -1)
 		handle_error(av[1]);
 	dup2(infile, 0);
-	close(infile);
-	close(pipefd[0]);
 	dup2(pipefd[1], 1);
-	close(pipefd[1]);
+	close(infile);
+	close_pipes(pipefd);
 	whole_cmd = ft_split(av[2], ' ');
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
@@ -39,7 +38,7 @@ void	child(int pipefd[2], char **av, char **env)
 	}
 }
 
-void	parent(int pipefd[2], char **av, char **env)
+static void	parent(int pipefd[2], char **av, char **env)
 {
 	int		outfile;
 	char	*path;
@@ -49,10 +48,9 @@ void	parent(int pipefd[2], char **av, char **env)
 	if (outfile == -1)
 		handle_error(av[4]);
 	dup2(outfile, 1);
-	close(outfile);
-	close(pipefd[1]);
 	dup2(pipefd[0], 0);
-	close(pipefd[0]);
+	close(outfile);
+	close_pipes(pipefd);
 	whole_cmd = ft_split(av[3], ' ');
 	path = get_path(whole_cmd[0], env);
 	if (execve(path, whole_cmd, env) == -1)
