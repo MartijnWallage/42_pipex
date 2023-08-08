@@ -6,7 +6,7 @@
 #    By: mwallage <mwallage@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/31 14:36:39 by mwallage          #+#    #+#              #
-#    Updated: 2023/08/07 16:30:18 by mwallage         ###   ########.fr        #
+#    Updated: 2023/08/08 16:26:54 by mwallage         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ SRCB	:= 	$(SRCBDIR)/pipex_bonus.c\
 OBJ		:= $(SRC:.c=.o)
 OBJB	:= $(SRCB:.c=.o)
 NAME	:= pipex
-NAMEB	:= pipex_bonus
 LIBFT	:= $(LIBDIR)/libft.a
 
 all: $(NAME)
@@ -30,13 +29,12 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIBFT)
 	cc $(OBJ) -o $@ -L$(LIBDIR) -lft
 
-bonus: $(NAMEB)
+bonus: $(OBJB) $(LIBFT)
+	rm -f $(OBJ)
+	cc $(OBJB) -o $(NAME) -L$(LIBDIR) -lft
 
 $(LIBFT): $(LIBDIR)/inc/libft.h
 	make -C$(LIBDIR)
-
-$(NAMEB): $(OBJB) $(LIBFT)
-	cc $(OBJB) -o $@ -L$(LIBDIR) -lft
 
 $(SRCDIR)/%.o: $(SRCDIR)/%.c
 	cc -Wall -Wextra -Werror -c $< -o $@ -I$(LIBDIR)/inc
@@ -49,7 +47,7 @@ clean:
 	make clean -C$(LIBDIR)
 
 fclean: clean
-	rm -f $(NAME) $(NAMEB)
+	rm -f $(NAME)
 	make fclean -C$(LIBDIR)
 
 re: fclean
